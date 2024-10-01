@@ -1,0 +1,146 @@
+body {
+    margin: 0;
+    font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS",
+        sans-serif;
+    background-color: #0fffcf;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+}
+
+.mask {
+    width: 100vw;
+    height: 100vh;
+    background-color: #0fffcf;
+    position: absolute;
+}
+
+.mask.hidden {
+    display: none;
+}
+
+.menu {
+    display: flex;
+    flex-direction: column;
+    row-gap: 50px;
+    font-size: 20px;
+    line-height: 1;
+    text-transform: uppercase;
+    letter-spacing: 0.2em;
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+}
+
+.menu.hidden {
+    display: none;
+}
+
+.button {
+    padding: 1em 2em 1em 2.2em;
+    color: #0fffcf;
+    cursor: pointer;
+    position: relative;
+    transition: color 0.1s linear;
+}
+
+.button:hover {
+    color: #260fff;
+}
+
+.button::before {
+    content: "";
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-color: #260fff;
+    border: 1px solid #260fff;
+    border-radius: 3em;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: -1;
+    transform: translate(-50%, -50%);
+    transition: background-color 0.1s linear;
+    animation: background 1.5s infinite;
+}
+
+.button:hover.button::before {
+    width: 110%;
+    height: 110%;
+    background-color: #0fffcf;
+}
+
+.field {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.cell {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 60px;
+    font-family: sans-serif;
+    font-weight: 700;
+    text-align: center;
+    background-color: #260fff;
+    border-radius: 50%;
+    outline: 1px solid #0fffcf;
+    cursor: pointer;
+    transition: opacity 0.1s linear;
+}
+
+.cell:hover {
+    opacity: 0.5;
+}
+
+.cell.clicked {
+    color: #0fffcf;
+    cursor: default;
+}
+
+.cell.clicked:hover {
+    opacity: 1;
+}
+
+.message {
+    display: none;
+    font-weight: 700;
+    font-size: 32px;
+    color: #260fff;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 1;
+    transform: translate(-50%, -50%);
+}
+
+.message.no-hidden {
+    display: block;
+}
+
+@keyframes background {
+    0% {
+        width: 100%;
+        height: 100%;
+        opacity: 1;
+    }
+    100% {
+        width: 150%;
+        height: 150%;
+        opacity: 0.8;
+    }
+}
