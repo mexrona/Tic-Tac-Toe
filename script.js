@@ -36,15 +36,15 @@ let game = true;
 
 for (let i = 0; i < field.length; i++) {
     field[i].addEventListener("click", function () {
+        if (!game && this.classList.contains("clicked")) return;
+
         const notClickedCells = document.querySelectorAll(
             ".cell:not(.clicked)"
         );
 
         if (notClickedCells.length === 1) {
             ending({win: "Ничья!"});
-        }
-
-        if (!this.classList.contains("clicked")) {
+        } else {
             movePlayer ? firstPlayer(this) : secondPlayer(this);
         }
     });
@@ -90,36 +90,42 @@ const secondPlayer = (that) => {
     movePlayer = !movePlayer;
 };
 
+const winningCombinations = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+];
+
 const checkMap = () => {
-    const block = document.querySelectorAll(".cell");
-    const items = [];
+    const items = Array.from(document.querySelectorAll(".cell")).map(
+        (cell) => cell.innerHTML
+    );
 
-    for (let i = 0; i < block.length; i++) {
-        items.push(block[i].innerHTML);
+    for (let i = 0; i < winningCombinations.length; i++) {
+        const winningCombination = winningCombinations[i];
+        let innerOne =
+            items[
+                winningCombination[
+                    winningCombination.length - winningCombination.length
+                ]
+            ];
+        let innerTwo = items[winningCombination[winningCombination.length - 2]];
+        let innerThree =
+            items[winningCombination[winningCombination.length - 1]];
+
+        if (innerOne === "x" && innerTwo === "x" && innerThree === "x") {
+            return {val: true, win: "Победили КРЕСТИКИ!"};
+        }
+
+        if (innerOne === "0" && innerTwo === "0" && innerThree === "0") {
+            return {val: true, win: "Победили НОЛИКИ!"};
+        }
     }
-
-    if (
-        (items[0] == "x" && items[1] == "x" && items[2] == "x") ||
-        (items[3] == "x" && items[4] == "x" && items[5] == "x") ||
-        (items[6] == "x" && items[7] == "x" && items[8] == "x") ||
-        (items[0] == "x" && items[3] == "x" && items[6] == "x") ||
-        (items[1] == "x" && items[4] == "x" && items[7] == "x") ||
-        (items[2] == "x" && items[5] == "x" && items[8] == "x") ||
-        (items[0] == "x" && items[4] == "x" && items[8] == "x") ||
-        (items[6] == "x" && items[4] == "x" && items[2] == "x")
-    )
-        return {val: true, win: "Победил первый игрок!"};
-    if (
-        (items[0] == "0" && items[1] == "0" && items[2] == "0") ||
-        (items[3] == "0" && items[4] == "0" && items[5] == "0") ||
-        (items[6] == "0" && items[7] == "0" && items[8] == "0") ||
-        (items[0] == "0" && items[3] == "0" && items[6] == "0") ||
-        (items[1] == "0" && items[4] == "0" && items[7] == "0") ||
-        (items[2] == "0" && items[5] == "0" && items[8] == "0") ||
-        (items[0] == "0" && items[4] == "0" && items[8] == "0") ||
-        (items[6] == "0" && items[4] == "0" && items[2] == "0")
-    )
-        return {val: true, win: "Победил второй игрок!"};
 
     return {val: false};
 };
@@ -130,6 +136,23 @@ const ending = (scenario) => {
     mask.classList.remove("hidden");
 
     setTimeout(() => {
-        location.reload();
+        message.classList.remove("no-hidden");
+        menu.classList.remove("hidden");
+
+        for (let i = 0; i < field.length; i++) {
+            field[i].innerHTML = "";
+
+            if (field[i].classList.contains("clicked")) {
+                field[i].classList.remove("clicked");
+            }
+
+            if (field[i].classList.contains("clicked-x")) {
+                field[i].classList.remove("clicked-x");
+            }
+
+            if (field[i].classList.contains("clicked-0")) {
+                field[i].classList.remove("clicked-0");
+            }
+        }
     }, 3000);
 };
